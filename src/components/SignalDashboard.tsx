@@ -10,6 +10,7 @@ import {
 } from "@/lib/i18n";
 import type { SnapshotResponse } from "@/lib/types";
 import { providerMatrix } from "@/lib/providerMatrix";
+import { ContactForm } from "./ContactForm";
 import { Disclaimer } from "./Disclaimer";
 import { IndicatorCard } from "./IndicatorCard";
 
@@ -142,6 +143,8 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
           ))}
         </div>
       </section>
+
+      <ContactForm language={language} />
     </main>
   );
 }

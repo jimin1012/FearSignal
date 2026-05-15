@@ -35,6 +35,17 @@ export const copy = {
     confidenceSuffix: "confidence",
     disclaimer:
       "This is an informational market-sentiment signal, not financial advice or a recommendation to buy or sell.",
+    contactTitle: "Contact",
+    contactDescription:
+      "Send feedback, data-source suggestions, or deployment questions.",
+    contactName: "Name",
+    contactNamePlaceholder: "Your name",
+    contactEmail: "Email",
+    contactEmailPlaceholder: "you@example.com",
+    contactMessage: "Message",
+    contactMessagePlaceholder: "Write your message",
+    contactSubmit: "Send",
+    contactNote: "",
   },
   ko: {
     language: "언어",
@@ -67,6 +78,17 @@ export const copy = {
     confidenceSuffix: "신뢰도",
     disclaimer:
       "이 화면은 시장 심리 지표 기반 참고 정보이며, 매수 또는 매도를 권유하는 금융 투자 조언이 아닙니다.",
+    contactTitle: "문의하기",
+    contactDescription:
+      "피드백, 데이터 출처 제안, 배포 관련 질문을 보낼 수 있습니다.",
+    contactName: "이름",
+    contactNamePlaceholder: "이름",
+    contactEmail: "이메일",
+    contactEmailPlaceholder: "you@example.com",
+    contactMessage: "메시지",
+    contactMessagePlaceholder: "문의 내용을 입력하세요",
+    contactSubmit: "보내기",
+    contactNote: "",
   },
 } satisfies Record<Language, Record<string, string>>;
 

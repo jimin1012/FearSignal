@@ -37,6 +37,75 @@
   --glow-btn: rgb(21, 15, 35) 0 0 8px 6px;
 }
 
+.contact-section {
+  margin-top: 48px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.contact-form {
+  display: grid;
+  max-width: 720px;
+  gap: 14px;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid var(--line-bright);
+  border-radius: 8px;
+  background: var(--card-inner);
+  color: var(--ink);
+  font: inherit;
+  padding: 12px 13px;
+}
+
+.contact-form textarea {
+  resize: vertical;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: var(--muted);
+}
+
+.contact-submit {
+  width: fit-content;
+  border: 1px solid var(--lime);
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--card);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 11px 18px;
+  box-shadow: var(--shadow-btn), var(--glow-btn);
+}
+
+.contact-submit:hover {
+  background: #d6ff68;
+}
+
+.contact-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 * {
   box-sizing: border-box;
 }
