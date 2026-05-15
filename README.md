@@ -1,52 +1,202 @@
 # FearSignal
 
-FearSignal is a Vercel-ready Next.js dashboard that combines VIX, CNN Fear & Greed, and put/call ratio data into a transparent market-sentiment signal.
+FearSignal은 미국 주식시장 분위기를 한눈에 볼 수 있도록 만든 시장 심리 대시보드입니다.
 
-The app is informational only. It is not financial advice and does not recommend buying or selling securities.
+VIX, CNN Fear & Greed Index, Put/Call Ratio를 종합해서 현재 시장이 공포에 가까운지, 중립인지, 탐욕에 가까운지를 보여줍니다. 화면에서는 단순히 점수만 보여주지 않고, 각 지표의 원본값, 출처, 데이터 최신성, 신뢰도, 오류 상태도 함께 표시합니다.
 
-## Stack
+> 이 서비스는 투자 조언이 아닙니다.  
+> 매수나 매도를 권유하지 않으며, 시장 심리를 참고하기 위한 정보성 도구입니다.
+
+## 주요 기능
+
+- 시장 심리 종합 점수 표시
+- `매수 관심`, `관망`, `리스크 축소 관심` 구간 표시
+- VIX 변동성 지표 표시
+- CNN Fear & Greed 지표 표시
+- Cboe Put/Call Ratio 지표 표시
+- 데이터 출처별 상태 표시
+- 데이터가 실패하거나 오래된 경우 신뢰도 하락 및 상태 표시
+- 영어/한국어 화면 전환
+- Vercel 배포 가능
+
+## 화면에서 보는 값의 의미
+
+### 종합 점수
+
+종합 점수는 0점부터 100점까지 표시됩니다.
+
+- `0-24`: 극단적 공포 구간
+- `25-44`: 공포 구간
+- `45-55`: 중립 구간
+- `56-74`: 탐욕 구간
+- `75-100`: 극단적 탐욕 구간
+
+점수가 낮을수록 시장에 공포가 강하다는 의미이고, 점수가 높을수록 시장에 탐욕이 강하다는 의미입니다.
+
+### 신뢰도
+
+신뢰도는 현재 표시되는 결과를 얼마나 믿을 수 있는지 보여주는 보조 지표입니다.
+
+예를 들어 CNN 데이터가 일시적으로 수집되지 않거나, 일부 외부 데이터가 오래된 경우 종합 점수는 표시될 수 있지만 신뢰도는 낮아집니다.
+
+### 데이터 상태
+
+각 지표에는 다음과 같은 상태가 표시됩니다.
+
+- `healthy`: 정상적으로 데이터를 가져온 상태
+- `degraded`: 일부 데이터가 부족하거나 대체 계산을 사용한 상태
+- `stale`: 데이터가 오래된 상태
+- `unavailable`: 데이터를 사용할 수 없는 상태
+
+FearSignal은 데이터 수집이 실패했을 때 임의로 값을 만들어 정상처럼 보여주지 않습니다. 문제가 있으면 화면에 상태와 신뢰도로 드러나도록 설계했습니다.
+
+## 사용하는 데이터
+
+### VIX
+
+VIX는 시장 변동성 지표입니다. 일반적으로 VIX가 높을수록 시장 불안이 크다고 해석합니다.
+
+이 프로젝트에서는 Cboe의 VIX 데이터를 사용합니다.
+
+### Put/Call Ratio
+
+Put/Call Ratio는 옵션 시장에서 풋옵션과 콜옵션의 비율을 보는 지표입니다.
+
+풋옵션 비중이 높으면 투자자들이 하락에 대비하고 있을 가능성이 있고, 반대로 콜옵션 비중이 높으면 상승 기대가 강할 수 있습니다.
+
+이 프로젝트에서는 Cboe Daily Market Statistics 데이터를 사용합니다.
+
+### CNN Fear & Greed Index
+
+CNN Fear & Greed Index는 여러 시장 지표를 종합해 공포와 탐욕 정도를 보여주는 지표입니다.
+
+다만 CNN의 JSON 데이터는 공식적으로 문서화된 공개 API가 아니므로, 이 프로젝트에서는 CNN 데이터를 필수값으로 취급하지 않습니다. CNN 데이터 수집에 실패하면 해당 상태를 `degraded`로 표시하고, 가능한 보조 계산을 사용합니다.
+
+## 기술 스택
 
 - Next.js 16
 - TypeScript
 - React
-- Recharts
 - Vitest
-- Vercel deployment target
+- ESLint
+- Vercel 배포 기준
 
-## Local Development
+## 로컬 실행 방법
+
+먼저 의존성을 설치합니다.
 
 ```bash
 npm install
+```
+
+개발 서버를 실행합니다.
+
+```bash
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+브라우저에서 아래 주소로 접속합니다.
 
-## Verification
+```text
+http://localhost:3000
+```
+
+## 검증 명령어
+
+타입 검사를 실행합니다.
 
 ```bash
 npm run typecheck
+```
+
+린트를 실행합니다.
+
+```bash
 npm run lint
+```
+
+테스트를 실행합니다.
+
+```bash
 npm test
+```
+
+프로덕션 빌드를 확인합니다.
+
+```bash
 npm run build
 ```
 
-## Data Sources
+## API
 
-- VIX: Cboe VIX historical data
-- Put/Call: Cboe Daily Market Statistics
-- Fear & Greed: CNN Fear & Greed endpoint when available
+### `/api/snapshot`
 
-CNN is treated as optional enrichment because the endpoint is undocumented. If it fails, the app returns a degraded snapshot with lower confidence instead of failing the entire page.
+현재 시장 심리 스냅샷을 반환합니다.
 
-## Vercel Deployment
+응답에는 다음 정보가 포함됩니다.
 
-No paid API keys or environment variables are required for the MVP.
+- 생성 시각
+- 캐시 상태
+- 종합 판단
+- 종합 점수
+- 신뢰도
+- 투자 조언이 아니라는 고지
+- 각 지표별 원본값
+- 각 지표별 정규화 점수
+- 데이터 출처
+- 데이터 최신성
+- 오류 또는 degraded 상태
 
-1. Push this repository to GitHub.
-2. Import `jimin1012/FearSignal` in Vercel.
-3. Use the default Next.js framework settings.
-4. Build command: `npm run build`
-5. Install command: `npm install`
+### `/api/history`
 
-The API route `/api/snapshot` sets server-side cache headers and returns source health, cache metadata, and confidence so users can see whether data is fresh, stale, degraded, or unavailable.
+현재 MVP에서는 실제 저장된 히스토리가 없기 때문에 과거 데이터를 반환하지 않습니다.
+
+가짜 과거 차트가 실제 시장 기록처럼 오해될 수 있으므로, 이 엔드포인트는 현재 `501` 응답을 반환합니다.
+
+## Vercel 배포 방법
+
+이 프로젝트는 Vercel 배포를 기준으로 구성되어 있습니다.
+
+1. GitHub 저장소에 코드를 push합니다.
+2. Vercel에서 `jimin1012/FearSignal` 저장소를 import합니다.
+3. Framework Preset은 Next.js로 둡니다.
+4. Install Command는 기본값 또는 `npm install`을 사용합니다.
+5. Build Command는 `npm run build`를 사용합니다.
+6. Output Directory는 별도로 지정하지 않습니다.
+
+현재 MVP는 별도의 유료 API 키나 환경 변수가 필요하지 않습니다.
+
+## 보안 및 키 관리
+
+현재 프로젝트에는 외부에 노출되면 안 되는 API 키, 토큰, 비밀번호, 개인키가 필요하지 않습니다.
+
+다음 항목은 현재 사용하지 않습니다.
+
+- `.env`
+- API Key
+- GitHub Token
+- Vercel Token
+- Database URL
+- OpenAI API Key
+- 개인 인증서 또는 개인키 파일
+
+외부 데이터는 공개적으로 접근 가능한 시장 데이터 페이지 또는 공개 endpoint를 서버에서 조회합니다. 단, CNN Fear & Greed 데이터는 공식 문서화 API가 아니므로 언제든지 실패할 수 있고, 이 경우 화면에서 degraded 상태로 표시합니다.
+
+나중에 유료 데이터 제공자나 데이터베이스를 붙이는 경우에는 반드시 `.env.local` 또는 Vercel Environment Variables에 저장해야 하며, 절대 GitHub에 커밋하면 안 됩니다.
+
+## 현재 한계
+
+- 실시간 매매 신호 서비스가 아닙니다.
+- 현재 MVP는 과거 종합 점수를 저장하지 않습니다.
+- `/api/history`는 실제 히스토리 저장 기능이 붙기 전까지 데이터를 반환하지 않습니다.
+- 무료 또는 비공식 데이터 출처는 지연, 차단, 구조 변경이 발생할 수 있습니다.
+
+## 향후 개선 방향
+
+- 실제 일별 종합 점수 저장
+- 히스토리 차트 추가
+- Vercel Cron을 이용한 정기 수집
+- Supabase, Neon, Vercel KV 등 저장소 연동
+- 지표별 가중치 조정 UI
+- 모바일 화면 추가 개선
+- 데이터 출처 장애 알림
