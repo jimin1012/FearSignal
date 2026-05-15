@@ -21,8 +21,3 @@ export async function fetchTextWithTimeout(url: string, timeoutMs = 6000): Promi
     clearTimeout(timeout);
   }
 }
-
-export async function fetchJsonWithTimeout<T>(url: string, timeoutMs = 6000): Promise<T> {
-  const text = await fetchTextWithTimeout(url, timeoutMs);
-  return JSON.parse(text) as T;
-}

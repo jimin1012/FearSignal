@@ -2,7 +2,16 @@ export type IndicatorStatus = "healthy" | "degraded" | "stale" | "unavailable";
 
 export type Staleness = "fresh" | "delayed" | "stale" | "unknown";
 
-export type IndicatorId = "vix" | "put_call" | "cnn_fear_greed" | "composite";
+export type IndicatorId =
+  | "market_momentum"
+  | "stock_strength"
+  | "stock_breadth"
+  | "put_call"
+  | "vix"
+  | "safe_haven"
+  | "junk_bond"
+  | "fear_greed"
+  | "composite";
 
 export type DecisionLabel =
   | "buy_opportunity"
@@ -77,10 +86,22 @@ export type PutCallData = {
   history: Array<{ date: string; total: number }>;
 };
 
-export type CnnFearGreedData = {
-  score: number;
-  rating: string;
-  previousClose?: number;
+export type PricePoint = {
+  date: string;
+  close: number;
+};
+
+export type SeriesData = {
+  current: number;
+  history: PricePoint[];
+};
+
+export type MultiSeriesData = {
+  series: Array<{
+    symbol: string;
+    current: number;
+    history: PricePoint[];
+  }>;
 };
 
 export type IndicatorInput = {

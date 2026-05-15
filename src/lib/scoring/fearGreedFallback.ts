@@ -18,13 +18,13 @@ export function scoreFearGreedFallback(components: FallbackComponent[]): {
     return {
       normalizedScore: null,
       confidence: 0,
-      reason: "Fallback Fear & Greed score is unavailable because no component data is available.",
+      reason: "Calculated Fear & Greed score is unavailable because no component data is available.",
     };
   }
 
   return {
     normalizedScore: Math.round(normalizedScore),
     confidence: Math.round(confidence),
-    reason: `Fallback Fear & Greed uses ${available.length}/${components.length} available components.`,
+    reason: `Calculated Fear & Greed uses ${available.length}/${components.length} available components.`,
   };
 }

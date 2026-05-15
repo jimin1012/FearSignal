@@ -17,17 +17,3 @@ export const validPutCallHtml = `
 </html>`;
 
 export const missingPutCallHtml = `<html><body>No ratios today</body></html>`;
-
-export const validCnnPayload = {
-  fear_and_greed: {
-    score: 31.4,
-    rating: "fear",
-    previous_close: 29.8,
-  },
-};
-
-export const malformedCnnPayload = {
-  fear_and_greed: {
-    rating: "fear",
-  },
-};

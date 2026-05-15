@@ -1,11 +1,25 @@
 import { getPutCallData, getVixData } from "./data/providers/cboe";
-import { getCnnFearGreed } from "./data/providers/cnnFearGreed";
+import {
+  getJunkBondDemandData,
+  getMarketMomentumData,
+  getSafeHavenDemandData,
+  getStockBreadthData,
+  getStockStrengthData,
+} from "./data/providers/marketData";
 import { getCachedSnapshot, setCachedSnapshot, SNAPSHOT_TTL_SECONDS } from "./cache";
-import { compositeScore, decisionFromScore, makeCompositeIndicator } from "./scoring/composite";
+import { decisionFromFearGreedAndVix } from "./scoring/composite";
 import { scoreFearGreedFallback } from "./scoring/fearGreedFallback";
+import {
+  scoreJunkBondDemand,
+  scoreMarketMomentum,
+  scoreSafeHavenDemand,
+  scoreStockBreadth,
+  scoreStockStrength,
+  type MarketScore,
+} from "./scoring/marketIndicators";
 import { scorePutCall } from "./scoring/putCall";
 import { scoreVix } from "./scoring/vix";
-import type { IndicatorSnapshot, SnapshotResponse } from "./types";
+import type { IndicatorSnapshot, ProviderResult, SnapshotResponse } from "./types";
 
 export async function buildSnapshot(useCache = true): Promise<SnapshotResponse> {
   if (useCache) {
@@ -13,11 +27,47 @@ export async function buildSnapshot(useCache = true): Promise<SnapshotResponse> 
     if (cached) return cached;
   }
 
-  const [vixResult, putCallResult, cnnResult] = await Promise.all([
-    getVixData(),
+  const [
+    marketMomentumResult,
+    stockStrengthResult,
+    stockBreadthResult,
+    putCallResult,
+    vixResult,
+    safeHavenResult,
+    junkBondResult,
+  ] = await Promise.all([
+    getMarketMomentumData(),
+    getStockStrengthData(),
+    getStockBreadthData(),
     getPutCallData(),
-    getCnnFearGreed(),
+    getVixData(),
+    getSafeHavenDemandData(),
+    getJunkBondDemandData(),
   ]);
+
+  const marketMomentumIndicator = scoredIndicator(
+    "market_momentum",
+    "Market Momentum",
+    marketMomentumResult,
+    scoreMarketMomentum,
+    84,
+  );
+
+  const stockStrengthIndicator = scoredIndicator(
+    "stock_strength",
+    "Stock Price Strength",
+    stockStrengthResult,
+    scoreStockStrength,
+    62,
+  );
+
+  const stockBreadthIndicator = scoredIndicator(
+    "stock_breadth",
+    "Stock Price Breadth",
+    stockBreadthResult,
+    scoreStockBreadth,
+    58,
+  );
 
   const vixIndicator: IndicatorSnapshot = vixResult.ok
     ? (() => {
@@ -63,47 +113,51 @@ export async function buildSnapshot(useCache = true): Promise<SnapshotResponse> 
         putCallResult.errorReason,
       );
 
-  const fallbackFearGreed = scoreFearGreedFallback([
-    { label: "VIX", score: vixIndicator.normalizedScore },
+  const safeHavenIndicator = scoredIndicator(
+    "safe_haven",
+    "Safe Haven Demand",
+    safeHavenResult,
+    scoreSafeHavenDemand,
+    60,
+  );
+
+  const junkBondIndicator = scoredIndicator(
+    "junk_bond",
+    "Junk Bond Demand",
+    junkBondResult,
+    scoreJunkBondDemand,
+    78,
+  );
+
+  const calculatedFearGreed = scoreFearGreedFallback([
+    { label: "Market Momentum", score: marketMomentumIndicator.normalizedScore },
+    { label: "Stock Price Strength", score: stockStrengthIndicator.normalizedScore },
+    { label: "Stock Price Breadth", score: stockBreadthIndicator.normalizedScore },
     { label: "Put/Call", score: putCallIndicator.normalizedScore },
+    { label: "VIX", score: vixIndicator.normalizedScore },
+    { label: "Safe Haven Demand", score: safeHavenIndicator.normalizedScore },
+    { label: "Junk Bond Demand", score: junkBondIndicator.normalizedScore },
   ]);
 
-  const cnnIndicator: IndicatorSnapshot = cnnResult.ok
-    ? {
-        id: "cnn_fear_greed",
-        label: "CNN Fear & Greed",
-        rawValue: cnnResult.data.score,
-        normalizedScore: cnnResult.data.score,
-        asOf: cnnResult.asOf,
-        source: cnnResult.source,
-        sourceUrl: cnnResult.sourceUrl,
-        staleness: cnnResult.staleness,
-        confidence: 80,
-        status: "healthy",
-        reason: `CNN rates current market sentiment as ${cnnResult.data.rating}.`,
-      }
-    : {
-        id: "cnn_fear_greed",
-        label: "CNN Fear & Greed",
-        rawValue: fallbackFearGreed.normalizedScore,
-        normalizedScore: fallbackFearGreed.normalizedScore,
-        asOf: null,
-        source: cnnResult.source,
-        sourceUrl: cnnResult.sourceUrl,
-        staleness: "unknown",
-        confidence: fallbackFearGreed.confidence,
-        status: "degraded",
-        errorReason: cnnResult.errorReason,
-        reason: `CNN endpoint unavailable. ${fallbackFearGreed.reason}`,
-      };
+  const fearGreedIndicator: IndicatorSnapshot = {
+    id: "fear_greed",
+    label: "Calculated Fear & Greed",
+    rawValue: calculatedFearGreed.normalizedScore,
+    normalizedScore: calculatedFearGreed.normalizedScore,
+    asOf: new Date().toISOString(),
+    source: "FearSignal calculated model",
+    sourceUrl: "",
+    staleness: "fresh",
+    confidence: calculatedFearGreed.confidence,
+    status: calculatedFearGreed.normalizedScore === null ? "unavailable" : "healthy",
+    reason: calculatedFearGreed.reason,
+  };
 
-  const composite = compositeScore({
-    vix: vixIndicator,
-    putCall: putCallIndicator,
-    cnnFearGreed: cnnIndicator,
-  });
-  const decision = decisionFromScore(composite.score, composite.confidence);
-  const compositeIndicator = makeCompositeIndicator(composite);
+  const decision = decisionFromFearGreedAndVix(
+    calculatedFearGreed.normalizedScore,
+    calculatedFearGreed.confidence,
+    vixIndicator.rawValue,
+  );
 
   return setCachedSnapshot({
     generatedAt: new Date().toISOString(),
@@ -113,8 +167,44 @@ export async function buildSnapshot(useCache = true): Promise<SnapshotResponse> 
       nextRefreshAt: null,
     },
     decision,
-    indicators: [compositeIndicator, vixIndicator, cnnIndicator, putCallIndicator],
+    indicators: [
+      fearGreedIndicator,
+      marketMomentumIndicator,
+      stockStrengthIndicator,
+      stockBreadthIndicator,
+      putCallIndicator,
+      vixIndicator,
+      safeHavenIndicator,
+      junkBondIndicator,
+    ],
   });
+}
+
+function scoredIndicator<T>(
+  id: IndicatorSnapshot["id"],
+  label: string,
+  result: ProviderResult<T>,
+  scoreData: (data: T) => MarketScore,
+  healthyConfidence: number,
+): IndicatorSnapshot {
+  if (!result.ok) {
+    return unavailableIndicator(id, label, result.source, result.sourceUrl, result.errorReason);
+  }
+
+  const score = scoreData(result.data);
+  return {
+    id,
+    label,
+    rawValue: score.rawValue,
+    normalizedScore: score.normalizedScore,
+    asOf: result.asOf,
+    source: result.source,
+    sourceUrl: result.sourceUrl,
+    staleness: result.staleness,
+    confidence: result.staleness === "stale" ? 50 : healthyConfidence,
+    status: result.staleness === "stale" ? "stale" : "healthy",
+    reason: score.reason,
+  };
 }
 
 function unavailableIndicator(

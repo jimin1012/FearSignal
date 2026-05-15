@@ -64,20 +64,117 @@ export function decisionFromScore(score: number | null, confidence: number): Dec
   };
 }
 
+export function decisionFromFearGreedAndVix(
+  fearGreedScore: number | null,
+  confidence: number,
+  vixRawValue: number | null,
+): DecisionSnapshot {
+  if (fearGreedScore === null || confidence < 20) {
+    return {
+      label: "insufficient_data",
+      displayText: "Insufficient data",
+      score: fearGreedScore,
+      confidence,
+      disclaimer: DISCLAIMER,
+    };
+  }
+
+  const vix = vixRawValue;
+  const hasVix = vix !== null && Number.isFinite(vix);
+
+  if (fearGreedScore <= 24) {
+    return {
+      label: "buy_opportunity",
+      displayText:
+        hasVix && vix >= 30
+          ? "Extreme fear: staged-buy opportunity"
+          : "Extreme fear: buy opportunity watch",
+      score: fearGreedScore,
+      confidence,
+      disclaimer: DISCLAIMER,
+    };
+  }
+
+  if (fearGreedScore <= 44) {
+    return {
+      label: "buy_opportunity",
+      displayText:
+        hasVix && vix >= 20
+          ? "Fear with elevated VIX: staged-buy watch"
+          : "Fear zone: buy-interest watch",
+      score: fearGreedScore,
+      confidence,
+      disclaimer: DISCLAIMER,
+    };
+  }
+
+  if (fearGreedScore <= 55) {
+    return {
+      label: "watch",
+      displayText: "Neutral: wait for a clearer setup",
+      score: fearGreedScore,
+      confidence,
+      disclaimer: DISCLAIMER,
+    };
+  }
+
+  if (fearGreedScore <= 74) {
+    return {
+      label: "sell_risk_reduction",
+      displayText:
+        hasVix && vix <= 18
+          ? "Greed with calm VIX: risk-reduction watch"
+          : "Greed zone: avoid chasing",
+      score: fearGreedScore,
+      confidence,
+      disclaimer: DISCLAIMER,
+    };
+  }
+
+  return {
+    label: "sell_risk_reduction",
+    displayText:
+      hasVix && vix <= 20
+        ? "Extreme greed: consider staged risk reduction"
+        : "Extreme greed: avoid new chasing buys",
+    score: fearGreedScore,
+    confidence,
+    disclaimer: DISCLAIMER,
+  };
+}
+
 export function compositeScore(indicators: {
   vix: IndicatorInput;
   putCall: IndicatorInput;
-  cnnFearGreed: IndicatorInput;
+  fearGreed: IndicatorInput;
+  marketMomentum?: IndicatorInput;
+  stockStrength?: IndicatorInput;
+  stockBreadth?: IndicatorInput;
+  safeHaven?: IndicatorInput;
+  junkBond?: IndicatorInput;
 }): {
   score: number | null;
   confidence: number;
   reason: string;
 } {
-  const weighted = [
-    { ...indicators.cnnFearGreed, weight: indicators.cnnFearGreed.status === "healthy" ? 0.45 : 0.5 },
-    { ...indicators.vix, weight: indicators.cnnFearGreed.status === "healthy" ? 0.3 : 0.25 },
-    { ...indicators.putCall, weight: 0.25 },
-  ].filter((item) => item.normalizedScore !== null && item.confidence > 0);
+  const candidates: Array<{ indicator: IndicatorInput | undefined; weight: number }> = [
+    { indicator: indicators.fearGreed, weight: 0.4 },
+    { indicator: indicators.marketMomentum, weight: 0.1 },
+    { indicator: indicators.stockStrength, weight: 0.1 },
+    { indicator: indicators.stockBreadth, weight: 0.1 },
+    { indicator: indicators.putCall, weight: 0.08 },
+    { indicator: indicators.vix, weight: 0.08 },
+    { indicator: indicators.safeHaven, weight: 0.07 },
+    { indicator: indicators.junkBond, weight: 0.07 },
+  ];
+  const weighted = candidates
+    .filter(
+      (item): item is { indicator: IndicatorInput; weight: number } =>
+        item.indicator !== undefined &&
+        item.indicator.normalizedScore !== null &&
+        item.indicator.confidence > 0,
+    )
+    .map((item) => ({ ...item.indicator, weight: item.weight }));
 
   if (weighted.length < 2) {
     return {

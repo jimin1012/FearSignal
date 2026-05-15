@@ -17,6 +17,10 @@ import { IndicatorCard } from "./IndicatorCard";
 export function SignalDashboard({ initialSnapshot }: { initialSnapshot: SnapshotResponse }) {
   const [language, setLanguage] = useState<Language>("en");
   const t = copy[language];
+  const fearGreedIndicator =
+    initialSnapshot.indicators.find((indicator) => indicator.id === "fear_greed") ??
+    initialSnapshot.indicators[0];
+  const vixIndicator = initialSnapshot.indicators.find((indicator) => indicator.id === "vix");
   const score = initialSnapshot.decision.score;
   const markerPosition = score === null ? 50 : score;
 
@@ -55,20 +59,20 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
           <Disclaimer language={language} />
           <div className="hero-metrics" aria-label="Composite signal summary">
             <div>
-              <span>{t.composite}</span>
+              <span>{t.fearGreedIndex}</span>
               <strong>{initialSnapshot.decision.score ?? "N/A"}</strong>
+            </div>
+            <div>
+              <span>VIX</span>
+              <strong>{vixIndicator?.rawValue ?? "N/A"}</strong>
             </div>
             <div>
               <span>{t.confidence}</span>
               <strong>{initialSnapshot.decision.confidence}%</strong>
             </div>
-            <div>
-              <span>{t.cache}</span>
-              <strong>{initialSnapshot.cache.status}</strong>
-            </div>
           </div>
         </div>
-        <div className="score-panel" aria-label="Current composite signal">
+        <div className="score-panel" aria-label="Current Fear and Greed index">
           <div className="score-panel__header">
             <span>{t.currentScore}</span>
             <strong>{score ?? "N/A"}</strong>
@@ -85,10 +89,9 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
         </div>
       </section>
 
-      <section className="section-grid" aria-label={t.indicators}>
-        {initialSnapshot.indicators.map((indicator) => (
-          <IndicatorCard indicator={indicator} key={indicator.id} language={language} />
-        ))}
+      <section className="index-section" aria-label={t.fearGreedIndex}>
+        <IndicatorCard indicator={fearGreedIndicator} language={language} />
+        {vixIndicator ? <IndicatorCard indicator={vixIndicator} language={language} /> : null}
       </section>
 
       <section className="capability-section">

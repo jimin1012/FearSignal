@@ -27,7 +27,7 @@ describe("compositeScore", () => {
     const result = compositeScore({
       vix: healthy(20),
       putCall: { rawValue: null, normalizedScore: null, confidence: 0, status: "unavailable" },
-      cnnFearGreed: { rawValue: null, normalizedScore: null, confidence: 0, status: "unavailable" },
+      fearGreed: { rawValue: null, normalizedScore: null, confidence: 0, status: "unavailable" },
     });
 
     expect(result.score).toBeNull();
@@ -38,9 +38,9 @@ describe("compositeScore", () => {
     const result = compositeScore({
       vix: healthy(20),
       putCall: healthy(40),
-      cnnFearGreed: healthy(60),
+      fearGreed: healthy(60),
     });
 
-    expect(result.score).toBe(43);
+    expect(result.score).toBe(51);
   });
 });
