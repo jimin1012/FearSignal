@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   copy,
-  decisionDisplayText,
   providerCadence,
   providerName,
   type Language,
@@ -83,7 +82,7 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
       <section className="hero-panel">
         <div className="hero-panel__content">
           <p className="eyebrow">{t.eyebrow}</p>
-          <h1>{decisionDisplayText(initialSnapshot.decision, language)}</h1>
+          <h1>{t.heroTitle}</h1>
           <Disclaimer language={language} />
           <div className="hero-metrics" aria-label="Composite signal summary">
             <div style={{ borderLeftColor: metricBorderColor(score) }}>
