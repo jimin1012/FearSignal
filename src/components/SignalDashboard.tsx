@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   copy,
+  decisionDisplayText,
   providerCadence,
   providerName,
   type Language,
@@ -49,7 +50,9 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
     initialSnapshot.indicators[0];
   const vixIndicator = initialSnapshot.indicators.find((indicator) => indicator.id === "vix");
   const score = initialSnapshot.decision.score;
+  const fearGreedScore = fearGreedIndicator.normalizedScore;
   const markerPosition = score === null ? 50 : score;
+  const vixValue = vixIndicator?.rawValue ?? null;
 
   return (
     <main className="dashboard-shell">
@@ -87,11 +90,11 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
           <div className="hero-metrics" aria-label="Composite signal summary">
             <div style={{ borderLeftColor: metricBorderColor(score) }}>
               <span>{t.fearGreedIndex}</span>
-              <strong style={{ color: scoreColor(score) }}>{initialSnapshot.decision.score ?? "N/A"}</strong>
+              <strong style={{ color: scoreColor(fearGreedScore) }}>{fearGreedScore ?? "N/A"}</strong>
             </div>
             <div>
               <span>VIX</span>
-              <strong>{vixIndicator?.rawValue ?? "N/A"}</strong>
+              <strong>{vixValue ?? "N/A"}</strong>
             </div>
             <div>
               <span>{t.confidence}</span>
@@ -99,7 +102,7 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
             </div>
           </div>
         </div>
-        <div className="score-panel" aria-label="Current Fear and Greed index">
+        <div className="score-panel" aria-label="Current market signal score">
           <div className="score-panel__header">
             <span>{t.currentScore}</span>
             <strong style={{ color: scoreColor(score), textShadow: scoreGlow(score) }}>
@@ -114,7 +117,13 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
             <span>{t.neutral}</span>
             <span>{t.extremeGreed}</span>
           </div>
-
+          <div className="score-decision">
+            <span>{t.marketSignal}</span>
+            <strong>{decisionDisplayText(initialSnapshot.decision, language)}</strong>
+            <p>
+              {t.signalBasis} {t.fearGreedIndex} {fearGreedScore ?? "N/A"} · VIX {vixValue ?? "N/A"}
+            </p>
+          </div>
         </div>
       </section>
 

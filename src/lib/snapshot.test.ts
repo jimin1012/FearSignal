@@ -73,9 +73,7 @@ describe("buildSnapshot", () => {
     const result = await snapshot.buildSnapshot(false);
 
     expect(result.decision.label).not.toBe("insufficient_data");
-    expect(result.decision.score).toBe(
-      result.indicators.find((indicator) => indicator.id === "fear_greed")?.normalizedScore,
-    );
+    expect(result.decision.score).not.toBeNull();
     expect(result.indicators[0].id).toBe("fear_greed");
     expect(result.indicators.find((indicator) => indicator.id === "fear_greed")?.status).toBe("healthy");
     expect(result.indicators.find((indicator) => indicator.id === "fear_greed")?.sourceUrl).toBe("");

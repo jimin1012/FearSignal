@@ -81,51 +81,62 @@ export function decisionFromFearGreedAndVix(
 
   const vix = vixRawValue;
   const hasVix = vix !== null && Number.isFinite(vix);
+  const signalScore = finalSignalScore(fearGreedScore, vixRawValue);
 
-  if (fearGreedScore <= 24) {
+  if (signalScore === null) {
+    return {
+      label: "insufficient_data",
+      displayText: "Insufficient data",
+      score: null,
+      confidence: 0,
+      disclaimer: DISCLAIMER,
+    };
+  }
+
+  if (signalScore <= 24) {
     return {
       label: "buy_opportunity",
       displayText:
         hasVix && vix >= 30
           ? "Extreme fear: staged-buy opportunity"
           : "Extreme fear: buy opportunity watch",
-      score: fearGreedScore,
+      score: signalScore,
       confidence,
       disclaimer: DISCLAIMER,
     };
   }
 
-  if (fearGreedScore <= 44) {
+  if (signalScore <= 44) {
     return {
       label: "buy_opportunity",
       displayText:
         hasVix && vix >= 20
           ? "Fear with elevated VIX: staged-buy watch"
           : "Fear zone: buy-interest watch",
-      score: fearGreedScore,
+      score: signalScore,
       confidence,
       disclaimer: DISCLAIMER,
     };
   }
 
-  if (fearGreedScore <= 55) {
+  if (signalScore <= 55) {
     return {
       label: "watch",
       displayText: "Neutral: wait for a clearer setup",
-      score: fearGreedScore,
+      score: signalScore,
       confidence,
       disclaimer: DISCLAIMER,
     };
   }
 
-  if (fearGreedScore <= 74) {
+  if (signalScore <= 74) {
     return {
       label: "sell_risk_reduction",
       displayText:
         hasVix && vix <= 18
           ? "Greed with calm VIX: risk-reduction watch"
           : "Greed zone: avoid chasing",
-      score: fearGreedScore,
+      score: signalScore,
       confidence,
       disclaimer: DISCLAIMER,
     };
@@ -137,10 +148,49 @@ export function decisionFromFearGreedAndVix(
       hasVix && vix <= 20
         ? "Extreme greed: consider staged risk reduction"
         : "Extreme greed: avoid new chasing buys",
-    score: fearGreedScore,
+    score: signalScore,
     confidence,
     disclaimer: DISCLAIMER,
   };
+}
+
+export function finalSignalScore(
+  fearGreedScore: number | null,
+  vixRawValue: number | null,
+): number | null {
+  if (fearGreedScore === null || !Number.isFinite(fearGreedScore)) return null;
+
+  const vixScore = scoreVixRawForSignal(vixRawValue);
+  if (vixScore === null) return Math.round(clamp(fearGreedScore));
+
+  return Math.round(clamp(fearGreedScore * 0.65 + vixScore * 0.35));
+}
+
+function scoreVixRawForSignal(vixRawValue: number | null): number | null {
+  if (vixRawValue === null || !Number.isFinite(vixRawValue)) return null;
+
+  const points = [
+    { vix: 10, score: 95 },
+    { vix: 12, score: 90 },
+    { vix: 15, score: 82 },
+    { vix: 20, score: 70 },
+    { vix: 25, score: 55 },
+    { vix: 30, score: 35 },
+    { vix: 40, score: 20 },
+    { vix: 50, score: 10 },
+  ];
+
+  if (vixRawValue <= points[0].vix) return points[0].score;
+  for (let index = 1; index < points.length; index += 1) {
+    const previous = points[index - 1];
+    const current = points[index];
+    if (vixRawValue <= current.vix) {
+      const ratio = (vixRawValue - previous.vix) / (current.vix - previous.vix);
+      return previous.score + (current.score - previous.score) * ratio;
+    }
+  }
+
+  return 5;
 }
 
 export function compositeScore(indicators: {

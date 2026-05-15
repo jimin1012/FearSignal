@@ -443,6 +443,39 @@ h1 {
   padding-top: 20px;
 }
 
+.score-decision {
+  border-top: 1px solid var(--line-bright);
+  padding-top: 20px;
+}
+
+.score-decision span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.score-decision strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--ink-bright);
+  font-family: var(--font-display, "Space Grotesk"), sans-serif;
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.score-decision p {
+  margin-top: 10px;
+  border-top: 0;
+  padding-top: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
 /* ?? Index section ?????????????????????????????????????? */
 
 .section-grid {
