@@ -43,9 +43,9 @@
 
 .contact-section {
   margin-top: 48px;
-  border: 3px solid #ffffff;
-  background: #ffffff;
-  color: #150f23;
+  border: 3px solid #000000;
+  background: #1c1c1d;
+  
   border-radius: 12px;
   padding: 32px;
   box-shadow:
@@ -62,7 +62,7 @@
 .contact-form label {
   display: grid;
   gap: 7px;
-  color: #150f23;
+  color: #f4f4f5;
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -125,11 +125,12 @@
 
 .contact-section .section-heading h2,
 .contact-section .section-heading p {
-  color: #150f23;
+  color: #f4f3f5;
 }
 
 .contact-section .section-heading p {
   opacity: 0.72;
+  color: #ffffff;
 }
 
 * {
@@ -144,7 +145,7 @@ html {
 
 body {
   margin: 0;
-  background:#1b132c;
+  background:#0b0b0d;
   color: var(--ink);
   font-family: var(--font-ui, "Rubik"), -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -244,7 +245,7 @@ a:hover {
 .capability-card {
   border: 2px solid var(--line-bright);
   background:
-    linear-gradient(180deg, #201634 0%, #150f23 100%);
+    linear-gradient(180deg, #17171a 0%, #222226 100%);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.08),
     0 22px 60px rgba(0, 0, 0, 0.32),

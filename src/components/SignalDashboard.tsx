@@ -136,12 +136,6 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
             <article className="capability-card" key={provider.id}>
               <h3>{providerName(provider, language)}</h3>
               <p>{providerCadence(provider, language)}</p>
-              <dl>
-                <div>
-                  <dt>{t.required}</dt>
-                  <dd>{provider.requiredForValidSnapshot ? t.yes : t.no}</dd>
-                </div>
-              </dl>
             </article>
           ))}
         </div>
