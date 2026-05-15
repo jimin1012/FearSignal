@@ -1,78 +1,114 @@
+"use client";
+
+import { useState } from "react";
+import {
+  copy,
+  decisionDisplayText,
+  providerCadence,
+  providerFallback,
+  providerName,
+  type Language,
+} from "@/lib/i18n";
 import type { SnapshotResponse } from "@/lib/types";
 import { providerMatrix } from "@/lib/providerMatrix";
 import { Disclaimer } from "./Disclaimer";
 import { IndicatorCard } from "./IndicatorCard";
 
 export function SignalDashboard({ initialSnapshot }: { initialSnapshot: SnapshotResponse }) {
+  const [language, setLanguage] = useState<Language>("en");
+  const t = copy[language];
   const score = initialSnapshot.decision.score;
   const markerPosition = score === null ? 50 : score;
 
   return (
     <main className="dashboard-shell">
+      <div className="top-bar">
+        <fieldset className="language-selector" aria-label={t.language}>
+          <legend>{t.language}</legend>
+          <label>
+            <input
+              type="radio"
+              name="language"
+              value="en"
+              checked={language === "en"}
+              onChange={() => setLanguage("en")}
+            />
+            <span>{t.english}</span>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="language"
+              value="ko"
+              checked={language === "ko"}
+              onChange={() => setLanguage("ko")}
+            />
+            <span>{t.korean}</span>
+          </label>
+        </fieldset>
+      </div>
+
       <section className="hero-panel">
         <div className="hero-panel__content">
-          <p className="eyebrow">FearSignal Market Sentiment</p>
-          <h1>{initialSnapshot.decision.displayText}</h1>
-          <Disclaimer />
+          <p className="eyebrow">{t.eyebrow}</p>
+          <h1>{decisionDisplayText(initialSnapshot.decision, language)}</h1>
+          <Disclaimer language={language} />
           <div className="hero-metrics" aria-label="Composite signal summary">
             <div>
-              <span>Composite</span>
+              <span>{t.composite}</span>
               <strong>{initialSnapshot.decision.score ?? "N/A"}</strong>
             </div>
             <div>
-              <span>Confidence</span>
+              <span>{t.confidence}</span>
               <strong>{initialSnapshot.decision.confidence}%</strong>
             </div>
             <div>
-              <span>Cache</span>
+              <span>{t.cache}</span>
               <strong>{initialSnapshot.cache.status}</strong>
             </div>
           </div>
         </div>
         <div className="score-panel" aria-label="Current composite signal">
           <div className="score-panel__header">
-            <span>Current score</span>
+            <span>{t.currentScore}</span>
             <strong>{score ?? "N/A"}</strong>
           </div>
           <div className="score-scale" aria-hidden="true">
             <span className="score-scale__marker" style={{ left: `${markerPosition}%` }} />
           </div>
           <div className="score-labels">
-            <span>Extreme fear</span>
-            <span>Neutral</span>
-            <span>Extreme greed</span>
+            <span>{t.extremeFear}</span>
+            <span>{t.neutral}</span>
+            <span>{t.extremeGreed}</span>
           </div>
-          <p>
-            FearSignal does not show historical charts until real persisted history is available.
-            This prevents demo-like or synthetic data from being mistaken for market history.
-          </p>
+          <p>{t.noHistory}</p>
         </div>
       </section>
 
-      <section className="section-grid" aria-label="Indicators">
+      <section className="section-grid" aria-label={t.indicators}>
         {initialSnapshot.indicators.map((indicator) => (
-          <IndicatorCard indicator={indicator} key={indicator.id} />
+          <IndicatorCard indicator={indicator} key={indicator.id} language={language} />
         ))}
       </section>
 
       <section className="capability-section">
         <div className="section-heading">
-          <h2>Source Health Matrix</h2>
-          <p>Every source is treated as fallible. Degraded data lowers confidence instead of hiding risk.</p>
+          <h2>{t.sourceHealthMatrix}</h2>
+          <p>{t.sourceHealthDescription}</p>
         </div>
         <div className="capability-grid">
           {providerMatrix.map((provider) => (
             <article className="capability-card" key={provider.id}>
-              <h3>{provider.sourceName}</h3>
-              <p>{provider.updateCadence}</p>
+              <h3>{providerName(provider, language)}</h3>
+              <p>{providerCadence(provider, language)}</p>
               <dl>
                 <div>
-                  <dt>Required</dt>
-                  <dd>{provider.requiredForValidSnapshot ? "Yes" : "No"}</dd>
+                  <dt>{t.required}</dt>
+                  <dd>{provider.requiredForValidSnapshot ? t.yes : t.no}</dd>
                 </div>
                 <div>
-                  <dt>Fallback</dt>
-                  <dd>{provider.fallbackBehavior}</dd>
+                  <dt>{t.fallback}</dt>
+                  <dd>{providerFallback(provider, language)}</dd>
                 </div>
               </dl>
             </article>

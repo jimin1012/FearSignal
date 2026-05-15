@@ -1,5 +1,5 @@
-import { DISCLAIMER } from "@/lib/scoring/composite";
+import { copy, type Language } from "@/lib/i18n";
 
-export function Disclaimer() {
-  return <p className="disclaimer">{DISCLAIMER}</p>;
+export function Disclaimer({ language }: { language: Language }) {
+  return <p className="disclaimer">{copy[language].disclaimer}</p>;
 }
