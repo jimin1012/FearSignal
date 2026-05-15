@@ -129,8 +129,8 @@
   "hotPaths": [
     {
       "path": "src\\components\\SignalDashboard.tsx",
-      "accessCount": 5,
-      "lastAccessed": 1778809997953,
+      "accessCount": 8,
+      "lastAccessed": 1778812095850,
       "type": "file"
     },
     {
@@ -146,15 +146,15 @@
       "type": "file"
     },
     {
-      "path": "src\\app\\page.tsx",
-      "accessCount": 2,
-      "lastAccessed": 1778810657542,
+      "path": "src\\components\\IndicatorCard.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1778811977021,
       "type": "file"
     },
     {
-      "path": "src\\components\\IndicatorCard.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1778809376596,
+      "path": "src\\app\\page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1778810657542,
       "type": "file"
     },
     {
@@ -197,6 +197,18 @@
       "path": "src\\lib\\cache.ts",
       "accessCount": 1,
       "lastAccessed": 1778810599088,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\i18n.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778811944484,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\scoring\\fearGreedFallback.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778811944787,
       "type": "file"
     }
   ],

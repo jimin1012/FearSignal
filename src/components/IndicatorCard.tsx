@@ -2,7 +2,6 @@ import type { IndicatorSnapshot } from "@/lib/types";
 import {
   copy,
   errorText,
-  indicatorReason,
   translateIndicatorLabel,
   type Language,
 } from "@/lib/i18n";
@@ -42,8 +41,7 @@ export function IndicatorCard({
           <dd>{indicator.asOf ?? t.unknown}</dd>
         </div>
       </dl>
-      <p className="reason">{indicatorReason(indicator, language)}</p>
-      {errorText(indicator, language) ? <p className="error-note">{errorText(indicator, language)}</p> : null}
+{errorText(indicator, language) ? <p className="error-note">{errorText(indicator, language)}</p> : null}
       {indicator.sourceUrl ? (
         <a className="source-link" href={indicator.sourceUrl} target="_blank" rel="noreferrer">
           {t.source}

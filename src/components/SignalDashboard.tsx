@@ -5,7 +5,6 @@ import {
   copy,
   decisionDisplayText,
   providerCadence,
-  providerFallback,
   providerName,
   type Language,
 } from "@/lib/i18n";
@@ -114,7 +113,7 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
             <span>{t.neutral}</span>
             <span>{t.extremeGreed}</span>
           </div>
-          <p>{t.noHistory}</p>
+
         </div>
       </section>
 
@@ -137,10 +136,6 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
                 <div>
                   <dt>{t.required}</dt>
                   <dd>{provider.requiredForValidSnapshot ? t.yes : t.no}</dd>
-                </div>
-                <div>
-                  <dt>{t.fallback}</dt>
-                  <dd>{providerFallback(provider, language)}</dd>
                 </div>
               </dl>
             </article>
