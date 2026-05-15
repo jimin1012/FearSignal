@@ -35,9 +35,23 @@ export const copy = {
     confidenceSuffix: "confidence",
     disclaimer:
       "This is an informational market-sentiment signal, not financial advice or a recommendation to buy or sell.",
+    referenceTitle: "Reference thresholds",
+    referenceDescription:
+      "These ranges explain how FearSignal interprets the calculated Fear & Greed index and VIX together.",
+    buyReferenceTitle: "Buy-opportunity reference",
+    sellReferenceTitle: "Sell / risk-reduction reference",
+    fearGreedReferenceLabel: "Fear & Greed Index",
+    vixReferenceLabel: "VIX",
+    buyFearGreedRules:
+      "0-10: extreme fear, strong buy candidate|10-20: staged-buy interest zone|20-30: correction watch zone|30-50: neutral, no need to rush buying|50+: buy attractiveness declines",
+    buyVixRules:
+      "20 or lower: stable market, not a fear-buy zone|25-30: correction market, interest zone|30-40: staged-buy candidate|40+: strong fear zone|50+: panic market, possible long-term buy candidate",
+    sellFearGreedRules:
+      "70+: overheating caution|80+: partial profit-taking or risk-reduction candidate|90+: extreme greed, caution on new buying",
+    sellVixRules:
+      "12-15: market may be too complacent|10-12: extreme low volatility, overheating caution",
     contactTitle: "Contact",
-    contactDescription:
-      "Send feedback, data-source suggestions, or deployment questions.",
+    contactDescription: "Send feedback, data-source suggestions, or deployment questions.",
     contactName: "Name",
     contactNamePlaceholder: "Your name",
     contactEmail: "Email",
@@ -78,9 +92,23 @@ export const copy = {
     confidenceSuffix: "신뢰도",
     disclaimer:
       "이 화면은 시장 심리 지표 기반 참고 정보이며, 매수 또는 매도를 권유하는 금융 투자 조언이 아닙니다.",
+    referenceTitle: "참고 기준",
+    referenceDescription:
+      "FearSignal이 계산한 공포와 탐욕 지수와 VIX를 함께 해석할 때 사용하는 기준입니다.",
+    buyReferenceTitle: "매수 기회 참고 기준",
+    sellReferenceTitle: "매도/비중축소 참고 기준",
+    fearGreedReferenceLabel: "공포와 탐욕 지수",
+    vixReferenceLabel: "VIX",
+    buyFearGreedRules:
+      "0~10: 극단 공포, 강한 매수 후보|10~20: 분할매수 관심 구간|20~30: 조정 관찰 구간|30~50: 중립, 급하게 매수할 필요 없음|50 이상: 매수 매력 낮아짐",
+    buyVixRules:
+      "20 이하: 시장 안정, 공포 매수 구간 아님|25~30: 조정장, 관심 구간|30~40: 분할매수 후보|40 이상: 강한 공포 구간|50 이상: 패닉장, 장기 매수 후보 가능",
+    sellFearGreedRules:
+      "70 이상: 과열 주의|80 이상: 일부 익절 또는 비중축소 후보|90 이상: 극단 탐욕, 신규매수 주의",
+    sellVixRules:
+      "12~15: 시장이 지나치게 안심한 구간|10~12: 극단적 저변동성, 과열 경계",
     contactTitle: "문의하기",
-    contactDescription:
-      "피드백, 데이터 출처 제안, 배포 관련 질문을 보낼 수 있습니다.",
+    contactDescription: "피드백, 데이터 출처 제안, 배포 관련 질문을 보낼 수 있습니다.",
     contactName: "이름",
     contactNamePlaceholder: "이름",
     contactEmail: "이메일",

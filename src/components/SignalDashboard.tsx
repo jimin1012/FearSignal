@@ -13,6 +13,7 @@ import { providerMatrix } from "@/lib/providerMatrix";
 import { ContactForm } from "./ContactForm";
 import { Disclaimer } from "./Disclaimer";
 import { IndicatorCard } from "./IndicatorCard";
+import { ReferenceGuide } from "./ReferenceGuide";
 
 function scoreColor(score: number | null): string {
   if (score === null) return "rgba(255,255,255,0.35)";
@@ -122,6 +123,8 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
         <IndicatorCard indicator={fearGreedIndicator} language={language} />
         {vixIndicator ? <IndicatorCard indicator={vixIndicator} language={language} /> : null}
       </section>
+
+      <ReferenceGuide language={language} />
 
       <section className="capability-section">
         <div className="section-heading">
