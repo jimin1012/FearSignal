@@ -4,11 +4,15 @@
   /* Canvas — Sentri spec exact values */
   --bg: #1f1633;
   --card: #150f23;
-  --card-inner: #100b1a;
+  --card-inner: #1f1633;
+  --surface-light: #ffffff;
+  --surface-press-light: #f0f0f0;
+  --hairline-cloud: #e5e7eb;
+  --hairline-cool: #cfcfdb;
 
   /* Borders */
   --line: #362d59;
-  --line-bright: #4a3d72;
+  --line-bright: #79628c;
 
   /* Text */
   --ink: rgba(255, 255, 255, 0.92);
@@ -31,7 +35,7 @@
   --green: var(--lime);
   --red: var(--pink);
 
-  /* Elevation ??Sentri-style: no shadows on dark canvas */
+  /* Elevation: Sentri-style dark surfaces stay mostly flat */
   --shadow-btn: rgba(0, 0, 0, 0.08) 0 2px 8px 0;
   --shadow-lift: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.1) 0 4px 6px -4px;
   --glow-btn: rgb(21, 15, 35) 0 0 8px 6px;
@@ -39,10 +43,14 @@
 
 .contact-section {
   margin-top: 48px;
-  border: 1px solid var(--line);
-  background: var(--card);
+  border: 3px solid #ffffff;
+  background: #ffffff;
+  color: #150f23;
   border-radius: 12px;
-  padding: 24px;
+  padding: 32px;
+  box-shadow:
+    0 0 0 2px rgba(194, 239, 78, 0.35),
+    0 24px 70px rgba(0, 0, 0, 0.42);
 }
 
 .contact-form {
@@ -54,7 +62,7 @@
 .contact-form label {
   display: grid;
   gap: 7px;
-  color: var(--muted);
+  color: #150f23;
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -64,12 +72,19 @@
 .contact-form input,
 .contact-form textarea {
   width: 100%;
-  border: 1px solid var(--line-bright);
-  border-radius: 8px;
-  background: var(--card-inner);
-  color: var(--ink);
+  border: 2px solid #cfcfdb;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #150f23;
   font: inherit;
   padding: 12px 13px;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--violet);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.12), 0 0 0 3px rgba(106, 95, 193, 0.18);
+  outline: none;
 }
 
 .contact-form textarea {
@@ -78,32 +93,43 @@
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
-  color: var(--muted);
+  color: rgba(21, 15, 35, 0.45);
 }
 
 .contact-submit {
   width: fit-content;
-  border: 1px solid var(--lime);
-  border-radius: 999px;
-  background: var(--lime);
-  color: var(--card);
+  border: 1px solid #150f23;
+  border-radius: 8px;
+  background: #150f23;
+  color: #ffffff;
   cursor: pointer;
   font: inherit;
   font-size: 0.9rem;
   font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
   padding: 11px 18px;
   box-shadow: var(--shadow-btn), var(--glow-btn);
 }
 
 .contact-submit:hover {
-  background: #d6ff68;
+  background: #1a1a1a;
 }
 
 .contact-note {
   margin: 0;
-  color: var(--muted);
+  color: rgba(31, 22, 51, 0.66);
   font-size: 0.88rem;
   line-height: 1.5;
+}
+
+.contact-section .section-heading h2,
+.contact-section .section-heading p {
+  color: #150f23;
+}
+
+.contact-section .section-heading p {
+  opacity: 0.72;
 }
 
 * {
@@ -112,9 +138,13 @@
 
 /* ?? Starfield texture ?????????????????????????????????? */
 
+html {
+  /* background:#1f1633; */
+}
+
 body {
   margin: 0;
-  background-color: var(--bg);
+  background:#1b132c;
   color: var(--ink);
   font-family: var(--font-ui, "Rubik"), -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -126,7 +156,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.035) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
   background-size: 36px 36px;
   pointer-events: none;
   z-index: 0;
@@ -212,8 +242,13 @@ a:hover {
 .score-panel,
 .indicator-card,
 .capability-card {
-  border: 1px solid var(--line);
-  background: var(--card);
+  border: 2px solid var(--line-bright);
+  background:
+    linear-gradient(180deg, #201634 0%, #150f23 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 22px 60px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
 }
@@ -290,8 +325,8 @@ h1 {
 
 .hero-metrics div {
   min-width: 0;
-  border: 1px solid var(--line);
-  border-left: 2px solid var(--lime);
+  border: 1px solid var(--line-bright);
+  border-left: 4px solid var(--lime);
   background: var(--card-inner);
   padding: 14px 16px;
   border-radius: 4px;
@@ -433,6 +468,11 @@ h1 {
 
 .reference-guide {
   margin-top: 32px;
+  border: 2px solid var(--hairline-cloud);
+  background: var(--surface-light);
+  color: var(--card);
+  border-radius: 12px;
+  padding: 32px;
 }
 
 .reference-grid {
@@ -443,22 +483,22 @@ h1 {
 
 .reference-card {
   min-width: 0;
-  border: 1px solid var(--line);
-  background: var(--card);
+  border: 2px solid var(--hairline-cloud);
+  background: var(--surface-light);
   border-radius: 12px;
-  padding: 22px;
+  padding: 24px;
 }
 
 .reference-card h3 {
   margin: 0 0 18px;
-  color: var(--ink-bright);
+  color: var(--card);
   font-size: 1.05rem;
   font-weight: 700;
 }
 
 .reference-card h4 {
   margin: 18px 0 8px;
-  color: var(--lime);
+  color: var(--violet);
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.2px;
@@ -477,9 +517,18 @@ h1 {
 }
 
 .reference-card li {
-  color: var(--ink);
+  color: var(--card);
   font-size: 0.9rem;
   line-height: 1.5;
+}
+
+.reference-guide .section-heading h2,
+.reference-guide .section-heading p {
+  color: var(--card);
+}
+
+.reference-guide .section-heading p {
+  opacity: 0.72;
 }
 
 /* ?? Indicator card ????????????????????????????????????? */
@@ -642,7 +691,7 @@ dd {
 }
 
 .source-link::after {
-  content: ""↗"";
+  content: "↗";
   font-size: 0.7rem;
   font-weight: 400;
 }
