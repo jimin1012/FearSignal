@@ -1,10 +1,10 @@
 ﻿:root {
   color-scheme: dark;
 
-  /* Canvas */
+  /* Canvas — Sentri spec exact values */
   --bg: #1f1633;
   --card: #150f23;
-  --card-inner: #120d1e;
+  --card-inner: #100b1a;
 
   /* Borders */
   --line: #362d59;

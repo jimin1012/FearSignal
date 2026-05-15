@@ -128,6 +128,12 @@
   },
   "hotPaths": [
     {
+      "path": "src\\app\\globals.css",
+      "accessCount": 9,
+      "lastAccessed": 1778818277106,
+      "type": "file"
+    },
+    {
       "path": "src\\components\\SignalDashboard.tsx",
       "accessCount": 8,
       "lastAccessed": 1778812095850,
@@ -137,12 +143,6 @@
       "path": "src\\app\\layout.tsx",
       "accessCount": 5,
       "lastAccessed": 1778811055754,
-      "type": "file"
-    },
-    {
-      "path": "src\\app\\globals.css",
-      "accessCount": 3,
-      "lastAccessed": 1778809982057,
       "type": "file"
     },
     {
