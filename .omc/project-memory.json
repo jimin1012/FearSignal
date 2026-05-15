@@ -126,6 +126,79 @@
       ]
     }
   },
-  "hotPaths": [],
+  "hotPaths": [
+    {
+      "path": "src\\components\\SignalDashboard.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1778809997953,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\layout.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1778809916478,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\globals.css",
+      "accessCount": 3,
+      "lastAccessed": 1778809982057,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1778810657542,
+      "type": "file"
+    },
+    {
+      "path": "src\\components\\IndicatorCard.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1778809376596,
+      "type": "file"
+    },
+    {
+      "path": "src\\components\\Disclaimer.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1778809377759,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\data\\fetch.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778810570027,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\data\\providers\\marketData.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778810579292,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\data\\providers\\cboe.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778810579663,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\snapshot.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778810580015,
+      "type": "file"
+    },
+    {
+      "path": "next.config.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778810598739,
+      "type": "file"
+    },
+    {
+      "path": "src\\lib\\cache.ts",
+      "accessCount": 1,
+      "lastAccessed": 1778810599088,
+      "type": "file"
+    }
+  ],
   "userDirectives": []
 }

@@ -14,6 +14,33 @@ import { providerMatrix } from "@/lib/providerMatrix";
 import { Disclaimer } from "./Disclaimer";
 import { IndicatorCard } from "./IndicatorCard";
 
+function scoreColor(score: number | null): string {
+  if (score === null) return "rgba(255,255,255,0.35)";
+  if (score <= 25) return "#fa7faa";
+  if (score <= 45) return "#f5c842";
+  if (score <= 55) return "rgba(255,255,255,0.55)";
+  if (score <= 75) return "#d4f06a";
+  return "#c2ef4e";
+}
+
+function scoreGlow(score: number | null): string {
+  if (score === null) return "none";
+  if (score <= 25) return "0 0 60px rgba(250,127,170,0.4)";
+  if (score <= 45) return "0 0 60px rgba(245,200,66,0.35)";
+  if (score <= 55) return "none";
+  if (score <= 75) return "0 0 60px rgba(194,239,78,0.25)";
+  return "0 0 60px rgba(194,239,78,0.45)";
+}
+
+function metricBorderColor(score: number | null): string {
+  if (score === null) return "var(--muted)";
+  if (score <= 25) return "#fa7faa";
+  if (score <= 45) return "#f5c842";
+  if (score <= 55) return "rgba(255,255,255,0.3)";
+  if (score <= 75) return "#d4f06a";
+  return "#c2ef4e";
+}
+
 export function SignalDashboard({ initialSnapshot }: { initialSnapshot: SnapshotResponse }) {
   const [language, setLanguage] = useState<Language>("en");
   const t = copy[language];
@@ -58,9 +85,9 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
           <h1>{decisionDisplayText(initialSnapshot.decision, language)}</h1>
           <Disclaimer language={language} />
           <div className="hero-metrics" aria-label="Composite signal summary">
-            <div>
+            <div style={{ borderLeftColor: metricBorderColor(score) }}>
               <span>{t.fearGreedIndex}</span>
-              <strong>{initialSnapshot.decision.score ?? "N/A"}</strong>
+              <strong style={{ color: scoreColor(score) }}>{initialSnapshot.decision.score ?? "N/A"}</strong>
             </div>
             <div>
               <span>VIX</span>
@@ -75,7 +102,9 @@ export function SignalDashboard({ initialSnapshot }: { initialSnapshot: Snapshot
         <div className="score-panel" aria-label="Current Fear and Greed index">
           <div className="score-panel__header">
             <span>{t.currentScore}</span>
-            <strong>{score ?? "N/A"}</strong>
+            <strong style={{ color: scoreColor(score), textShadow: scoreGlow(score) }}>
+              {score ?? "N/A"}
+            </strong>
           </div>
           <div className="score-scale" aria-hidden="true">
             <span className="score-scale__marker" style={{ left: `${markerPosition}%` }} />
