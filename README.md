@@ -127,33 +127,6 @@ npm run build
 
 현재 MVP에서는 실제로 저장된 히스토리가 없기 때문에 과거 데이터를 반환하지 않습니다. 가짜 과거 차트가 실제 시장 기록처럼 보이는 것을 막기 위해 현재는 `501` 응답을 반환합니다.
 
-## Vercel 배포
-
-이 프로젝트는 Vercel 배포에 적합합니다.
-
-1. GitHub 저장소에 코드를 push합니다.
-2. Vercel에서 `jimin1012/FearSignal` 저장소를 import합니다.
-3. Framework Preset은 Next.js를 선택합니다.
-4. Build Command는 `npm run build`를 사용합니다.
-5. Output Directory는 별도로 지정하지 않습니다.
-
-현재 MVP는 별도의 API 키나 환경 변수가 없어도 동작하도록 구성되어 있습니다.
-
-## 보안 및 키 관리
-
-현재 프로젝트에는 외부에 노출되면 안 되는 API 키, 토큰, 비밀번호, 데이터베이스 URL이 필요하지 않습니다.
-
-현재 사용하지 않는 항목:
-
-- `.env`
-- API Key
-- GitHub Token
-- Vercel Token
-- Database URL
-- OpenAI API Key
-
-추후 유료 데이터 제공자나 데이터베이스를 연결할 경우 키 값은 반드시 `.env.local` 또는 Vercel Environment Variables에 저장해야 하며 GitHub에 커밋하면 안 됩니다.
-
 ## 현재 한계
 
 - 실시간 매매 신호 서비스가 아닙니다.
