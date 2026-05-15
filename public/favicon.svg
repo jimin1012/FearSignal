@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FearSignal">
+  <rect width="64" height="64" fill="#000000"/>
+  <rect x="7" y="7" width="50" height="50" fill="none" stroke="#3a3a3a" stroke-width="2"/>
+  <path d="M18 40 L28 28 L36 34 L46 22" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="18" cy="40" r="3" fill="#c3d9f3"/>
+  <circle cx="46" cy="22" r="3" fill="#ffffff"/>
+  <path d="M16 49 H48" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+</svg>

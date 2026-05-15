@@ -18,6 +18,9 @@ const rubik = Rubik({
 export const metadata: Metadata = {
   title: "FearSignal",
   description: "Market sentiment dashboard using VIX, Fear & Greed, and put/call data.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   verification: {
     google: "HoOdQtpkKeW8BMoY_y1fl57TE4cbaPR8yijzvtsCVJ0",
   },
